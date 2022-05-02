@@ -2,7 +2,7 @@ local roulette_node
 local ball
 local ball_pivot
 local flag = false
-
+local count = 0
 local function toint(n)
     local s = tostring(n)
     local i, j = s:find('%.')
@@ -19,8 +19,9 @@ function init(self)
 	roulette_node = gui.get_node("roulette")
 	ball = gui.get_node("ball")
 	ball_pivot = gui.get_node("ball_pivot")
+	ball_back = gui.get_node("ball_back")
 
-	gui.animate(roulette_node, "rotation", vmath.vector3(0, 0, 360), gui.EASING_LINEAR, 4.5, 0, 0, gui.PLAYBACK_LOOP_FORWARD)
+	gui.animate(roulette_node, "rotation", vmath.vector3(0, 0, 360), gui.EASING_LINEAR, 6, 0, 0, gui.PLAYBACK_LOOP_FORWARD)
     math.randomseed(os.time())
 
 end
@@ -29,10 +30,13 @@ function update(self, dt)
 	if flag then
 		if toint(gui.get_rotation(ball_pivot).z) % 9 == 0 then
 			flag = false
-			timer.delay(0.5, false, function()
-				gui.animate(ball_pivot, "rotation", gui.get_rotation(ball_pivot) + vmath.vector3(0, 0, 1), gui.EASING_OUTBOUNCE, 0.05, 0, function()
-				gui.animate(ball_pivot, "rotation", -vmath.vector3(0, 0, 3.9 + 360 * 3), gui.EASING_LINEAR, 2)
-				flag = true
+			
+			timer.delay(0.1, false, function()
+				count = count + 1
+				gui.animate(ball_back, "rotation", vmath.vector3(0, 0, -5), gui.EASING_LINEAR, 1, 0, function()
+					print("kkkkkkkkkkk")
+					flag = true
+					gui.set_rotation(ball_back, vmath.vector3(0, 0,  0))
 				end)
 			end)
 		end
@@ -47,17 +51,14 @@ function on_input(self, action_id, action)
 	if action_id == hash("touch") then
 		--285
 		if action.pressed then
-			gui.animate(roulette_node, "rotation", gui.get_rotation(roulette_node) + vmath.vector3(0, 0, 900), gui.EASING_OUTSINE, 4.5)
-			
-			gui.animate(ball_pivot, "rotation", -vmath.vector3(0, 0, 3.9 + 360), gui.EASING_OUTSINE, 6)
-
-			gui.animate(ball, "position", vmath.vector3(330, 0, 0), gui.EASING_LINEAR, 1.2, 0, function()
+			gui.animate(roulette_node, "rotation", gui.get_rotation(roulette_node) + vmath.vector3(0, 0, 720), gui.EASING_OUTSINE, 14)
+			gui.animate(ball_pivot, "rotation", -vmath.vector3(0, 0, 900), gui.EASING_OUTSINE, 6)
+			gui.animate(ball, "position", vmath.vector3(330, 0, 0), gui.EASING_LINEAR, 2, 0, function()
 				gui.animate(ball, "position", vmath.vector3(285, 0, 0), gui.EASING_LINEAR, 2,0,function()
-					gui.animate(roulette_node, "rotation", gui.get_rotation(roulette_node) + vmath.vector3(0, 0, 360), gui.EASING_LINEAR, 3, 0, 0, gui.PLAYBACK_LOOP_FORWARD) 
+					gui.animate(roulette_node, "rotation", gui.get_rotation(roulette_node) + vmath.vector3(0, 0, 360), gui.EASING_LINEAR, 6, 0, 0, gui.PLAYBACK_LOOP_FORWARD) 
 				end)
-				gui.animate(ball_pivot, "rotation", -vmath.vector3(0, 0, 3.9 + 360 * 3), gui.EASING_OUTSINE, 2)
+				gui.animate(ball_pivot, "rotation", -vmath.vector3(0, 0, 360 * 2 + 180 + 5.5), gui.EASING_LINEAR, 2)
 				flag = true
-				
 			end)
 		end
 	end
