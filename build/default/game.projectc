@@ -7,7 +7,7 @@ input_method = HiddenInputField
 manifest = /builtins/manifests/android/AndroidManifest.xml
 minimum_sdk_version = 16
 package = com.example.todo
-target_sdk_version = 30
+target_sdk_version = 31
 version_code = 1
 
 [bootstrap]
